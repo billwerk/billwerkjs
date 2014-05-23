@@ -15,14 +15,14 @@ var SignupController = function ($scope, $http, $modal) {
     $scope.order = null;
     // Some default data so we don't have to enter a ton of info every time
     $scope.customerData = { firstName: "Marcellus", lastName: "Wallace", emailAddress: "mw@example.com" };
-    $scope.paymentData = { bearer: "CreditCard:Paymill", "cardNumber": "5169147129584558", cardHolder: "Marcellus Wallace", cvc: "911", expiryMonth: "12", expiryYear: "2017" };
+    $scope.paymentData = { bearer: "CreditCard:FakePSP", "cardNumber": "5169147129584558", cardHolder: "Marcellus Wallace", cvc: "911", expiryMonth: "12", expiryYear: "2017" };
     $scope.paymentMethods = {};
     $scope.paymentMethodEnum = [];
     $scope.paymentReady = false;
 
     // A lookup table for 'friendly' payment provider names
     // FIXME: This isn't pretty, and having the PSP's name in the strings for direct debit and credit card seems nonsensical
-    $scope.paymentMethodNames = { "CreditCard:Paymill": "Credit Card", "Debit:Paymill": "Direct Debit", "Skrill": "Skrill", "PayPal": "PayPal" };
+    $scope.paymentMethodNames = { "CreditCard:Paymill": "Credit Card", "Debit:Paymill": "Direct Debit", "Skrill": "Skrill", "PayPal": "PayPal", "Debit:FakePSP" : "Direct Debit", "CreditCard:FakePSP" : "Credit Card" };
 
     // The signup method that is called when the user submits the form
     $scope.signUp = function () {
@@ -100,10 +100,10 @@ var SignupController = function ($scope, $http, $modal) {
 
     var paymentConfig = {
         // REQUIRED. The initial order to be displayed. This will be requested immediately upon load
-        publicApiKey: "529f114351f459f55874f79b",
+        publicApiKey: "5331a0751d8dd00c4466c9be",
 
         // REQUIRED. After payment user will be redirected to this URL.
-        providerReturnUrl : "http://www.pactas.com",
+        providerReturnUrl: "http://pactas.github.io/iterojs",
 
         // OPTIONAL. Overwrite the handling of the 3d-secure iframes. Comment out these 
         // two lines to see what happens without (essentially the same, but not customizable).
@@ -125,7 +125,7 @@ var SignupController = function ($scope, $http, $modal) {
         console.log(errorData);
     });
 
-    var initialCart = { planVariantId: "529f20ed51f4591c2000e946", componentSubscriptions: [{ componentId: "529f209b51f4591c2000e942", quantity: 1}] };
+    var initialCart = { planVariantId: "5331a27f1d8dd00c4466c9dd", componentSubscriptions: [{ componentId: "537f6fb31d8dd000588fc677", quantity: 1}] };
     self.iteroInstance = new IteroJS.Signup();
     self.iteroInstance.preview(initialCart, $scope.customerData, function (success) {
         $scope.$apply(function () {
