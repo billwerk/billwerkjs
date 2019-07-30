@@ -28,9 +28,9 @@ var SignupController = function ($scope, $http, $modal) {
     $scope.signUp = function () {
         // To indicate that the site is working and to disable the signup button, we're setting a flag
         $scope.signupRunning = true;
-        // pass the order, customerData and payment data to IteroJS
+        // pass the order, customerData and payment data to subscriptionJS
         // DTO: PaymentData
-        self.iteroInstance.subscribe(self.iteroJSPayment, $scope.order, $scope.customerData, $scope.paymentData, function (data) {
+        self.iteroInstance.subscribe(self.subscriptionJSPayment, $scope.order, $scope.customerData, $scope.paymentData, function (data) {
             // This callback will be invoked when the signup succeeded (or failed)
             // Note that the callback must use $apply, otherwise angularjs won't notice we changed something:
             $scope.$apply(function () {
@@ -44,7 +44,7 @@ var SignupController = function ($scope, $http, $modal) {
     };
 
     $scope.preview = function () {
-        // ask IteroJS to update the expected total. preview() will internally use a timeout so it doesn't
+        // ask subscriptionJS to update the expected total. preview() will internally use a timeout so it doesn't
         // send a ton of requests and we don't need to bother with timeouts here.
         self.iteroInstance.preview($scope.order, $scope.customerData, function (data) {
             // use $scope.$apply so angular knows we're messing around with the scope's state again
@@ -77,7 +77,7 @@ var SignupController = function ($scope, $http, $modal) {
                 },
                 onclose: function () {
                     return function () {
-                        // Tell itero we're no longer trying to sign up:
+                        // Tell subscription we're no longer trying to sign up:
                         self.iteroInstance.abort();
                     };
                 }
@@ -103,7 +103,7 @@ var SignupController = function ($scope, $http, $modal) {
         publicApiKey: "5331a0751d8dd00c4466c9be",
 
         // REQUIRED. After payment user will be redirected to this URL.
-        providerReturnUrl: "http://pactas.github.io/iterojs",
+        providerReturnUrl: "https://developer.billwerk.io/Docs/subscriptionJS_Introduction",
 
         // OPTIONAL. Overwrite the handling of the 3d-secure iframes. Comment out these 
         // two lines to see what happens without (essentially the same, but not customizable).
@@ -112,12 +112,12 @@ var SignupController = function ($scope, $http, $modal) {
         "popupClose": tdsCleanup
     };
 
-    self.iteroJSPayment = new IteroJS.Payment(paymentConfig, function () {
+    self.subscriptionJSPayment = new subscriptionJS.Payment(paymentConfig, function () {
         $scope.$apply(function () {
-            // When IteroJS is ready, copy the payment methods and initial order
+            // When subscriptionJS is ready, copy the payment methods and initial order
             $scope.paymentReady = true;
-            $scope.paymentMethods = self.iteroJSPayment.getAvailablePaymentMethods();
-            $scope.paymentMethodEnum = self.iteroJSPayment.getAvailablePaymentMethodEnum();
+            $scope.paymentMethods = self.subscriptionJSPayment.getAvailablePaymentMethods();
+            $scope.paymentMethodEnum = self.subscriptionJSPayment.getAvailablePaymentMethodEnum();
             $scope.paymentData.bearer = $scope.paymentMethodEnum[0];
         });
     }, function (errorData) {
@@ -126,7 +126,7 @@ var SignupController = function ($scope, $http, $modal) {
     });
 
     var initialCart = { planVariantId: "5331a27f1d8dd00c4466c9dd", componentSubscriptions: [{ componentId: "537f6fb31d8dd000588fc677", quantity: 1}] };
-    self.iteroInstance = new IteroJS.Signup();
+    self.iteroInstance = new subscriptionJS.Signup();
     self.iteroInstance.preview(initialCart, $scope.customerData, function (success) {
         $scope.$apply(function () {
             $scope.order = success.Order;
