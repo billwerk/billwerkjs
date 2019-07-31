@@ -22,7 +22,7 @@ var SignupController = function ($scope, $http, $modal) {
 
     // A lookup table for 'friendly' payment provider names
     // FIXME: This isn't pretty, and having the PSP's name in the strings for direct debit and credit card seems nonsensical
-    $scope.paymentMethodNames = { "CreditCard:Paymill": "Credit Card", "Debit:Paymill": "Direct Debit", "Skrill": "Skrill", "PayPal": "PayPal", "Debit:FakePSP" : "Direct Debit", "CreditCard:FakePSP" : "Credit Card" };
+    $scope.paymentMethodNames = { "CreditCard:Paymill": "Credit Card", "Debit:Paymill": "Direct Debit", "PayPal": "PayPal", "Debit:FakePSP" : "Direct Debit", "CreditCard:FakePSP" : "Credit Card" };
 
     // The signup method that is called when the user submits the form
     $scope.signUp = function () {
